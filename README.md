@@ -1,4 +1,4 @@
-Project 1: 
+Project 1:
 Zip Code Search App
 
 - In this project, you will build a simple Zip Code search app
