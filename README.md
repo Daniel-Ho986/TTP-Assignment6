@@ -14,3 +14,4 @@ http://ctp-zip-api.herokuapp.com/zip/10016
 
 Provide the zipcode in the url and you will receive a JSON response with an array containing an object for each city found.
 
+View page at: https://daniel-ho986.github.io/TTP-Assignment6-Project1/
