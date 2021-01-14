@@ -27,7 +27,7 @@ class ZipSearch extends Component{
     // }
 
     fetchZipCode(){
-        axios.get('http://ctp-zip-api.herokuapp.com/zip/10016')
+        axios.get(`http://ctp-zip-api.herokuapp.com/zip/${this.state.code}`)
         .then(result => {
             this.setState({
                 zip: result.data,
