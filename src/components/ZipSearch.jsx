@@ -1,73 +1,79 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-import ZipInfo from './ZipInfo';
+import React, { Component } from "react";
+import axios from "axios";
+import ZipInfo from "./ZipInfo";
 
-class ZipSearch extends Component{
-    constructor(props){
-        super(props);
+class ZipSearch extends Component {
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            zip: [],
-            code: "",
-            match: false
-        };
-    
-        //this.componentDidMount = this.componentDidMount.bind(this);
-        this.fetchZipCode = this.fetchZipCode.bind(this);
-    }
+    this.state = {
+      zip: [],
+      code: "",
+      match: false,
+    };
 
-    setZip = (event) => {
+    //this.componentDidMount = this.componentDidMount.bind(this);
+    this.fetchZipCode = this.fetchZipCode.bind(this);
+  }
+
+  setZip = (event) => {
+    this.setState({
+      code: event.target.value,
+    });
+  };
+
+  // componentDidMount(){
+  //     this.fetchZipCode();
+  // }
+
+  fetchZipCode() {
+    axios
+      .get(`http://ctp-zip-api.herokuapp.com/zip/${this.state.code}`)
+      .then((result) => {
         this.setState({
-            code: event.target.value
+          zip: result.data,
+          match: true,
         });
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-    // componentDidMount(){
-    //     this.fetchZipCode();
-    // }
+  render() {
+    return (
+      <div className="zipsearch">
+        <p>Zip Code: </p>
+        <input
+          name="code"
+          type="text"
+          onChange={(e) => {
+            this.setZip(e);
+          }}
+          value={this.state.code}
+          placeholder="Try 10016"
+        />
+        <button onClick={this.fetchZipCode}>Search</button>
 
-    fetchZipCode(){
-        axios.get('http://ctp-zip-api.herokuapp.com/zip/10016')
-        .then(result => {
-            this.setState({
-                zip: result.data,
-                match: true
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    }
-
-    render(){
-        
-        return (
-            <div className="zipsearch">
-            <p>Zip Code: </p>
-            <input name="code" type="text" onChange={(e) => {this.setZip(e)}} value={this.state.code} placeholder="Try 10016"/>
-            <button onClick={this.fetchZipCode}>Search</button>
-            
-            {this.state.match ? (
-                <div>
-                {this.state.zip.map((item, index) => (
-                    <ZipInfo
-                        key = {index}
-                        city = {item.City}
-                        state = {item.State}
-                        lat = {item.Lat}
-                        long = {item.Long}
-                        population= {item.EstimatedPopulation}
-                        wages = {item.TotalWages}
-                    />
-                ))}
-                </div>
-            ) : <p>No Result</p> }
-             
-            </div>
-        );
-
-    
-}
-
+        {this.state.match ? (
+          <div>
+            {this.state.zip.map((item, index) => (
+              <ZipInfo
+                key={index}
+                city={item.City}
+                state={item.State}
+                lat={item.Lat}
+                long={item.Long}
+                population={item.EstimatedPopulation}
+                wages={item.TotalWages}
+              />
+            ))}
+          </div>
+        ) : (
+          <p>No Result</p>
+        )}
+      </div>
+    );
+  }
 }
 export default ZipSearch;
